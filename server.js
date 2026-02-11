@@ -1,12 +1,11 @@
 const express = require("express");
-const axios = require("axios");
 const cors = require("cors");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const TOKEN = "YcjWkLnSTyytUqnNLBthd"; // Đặt trong server
+const TOKEN = process.env.TOKEN; // Lấy từ Render
 
 app.post("/create-link", async (req, res) => {
     try {
@@ -26,6 +25,4 @@ app.post("/create-link", async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
-});
+app.listen(3000);
