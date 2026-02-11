@@ -4,17 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="no-referrer">
-<title>Shopee Link Converter</title>
+<title>Shopee Affiliate Converter</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box;}
 
 body{
   margin:0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg,#f5f7fa,#e4e8f0);
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#f5f7fa,#e4e8f0);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -26,8 +24,8 @@ body{
   max-width:400px;
   padding:35px;
   border-radius:20px;
-  background: rgba(255,255,255,0.4);
-  backdrop-filter: blur(15px);
+  background:rgba(255,255,255,0.4);
+  backdrop-filter:blur(15px);
   border:1px solid rgba(0,0,0,0.1);
   box-shadow:0 10px 30px rgba(0,0,0,0.08);
 }
@@ -48,7 +46,6 @@ input{
   font-size:14px;
   margin-bottom:15px;
   background:rgba(255,255,255,0.7);
-  transition:0.3s;
 }
 
 input:focus{
@@ -65,7 +62,6 @@ button{
   border:none;
   background:#000;
   color:white;
-  transition:0.2s ease;
 }
 
 button:hover{
@@ -85,46 +81,24 @@ button:hover{
 
 <div class="container">
   <h2>Shopee Affiliate Converter</h2>
-
   <input type="text" id="original" placeholder="Paste Shopee link here">
-
-  <button onclick="goLink()">Generate & Go</button>
-
-  <div class="footer">
-    You will be redirected automatically.
-  </div>
+  <button id="goBtn">Generate & Go</button>
+  <div class="footer">You will be redirected instantly.</div>
 </div>
 
 <script>
-const TOKEN = "YcjWkLnSTyytUqnNLBthd"; // your ecomobi token
+const TOKEN = "YcjWkLnSTyytUqnNLBthd";
 
-function goLink(){
-  let link = document.getElementById("original").value.trim();
-  if(!link) return;
+document.getElementById("goBtn").addEventListener("click", function() {
+    let link = document.getElementById("original").value.trim();
+    if(!link) return;
 
-  let encoded = encodeURIComponent(link);
+    let encoded = encodeURIComponent(link);
+    let finalURL = "https://goeco.mobi/?token=" + TOKEN + "&url=" + encoded;
 
-  // Create form dynamically (best method for iOS & mobile)
-  let form = document.createElement("form");
-  form.method = "GET";
-  form.action = "https://goeco.mobi/";
-
-  let tokenInput = document.createElement("input");
-  tokenInput.type = "hidden";
-  tokenInput.name = "token";
-  tokenInput.value = TOKEN;
-
-  let urlInput = document.createElement("input");
-  urlInput.type = "hidden";
-  urlInput.name = "url";
-  urlInput.value = encoded;
-
-  form.appendChild(tokenInput);
-  form.appendChild(urlInput);
-
-  document.body.appendChild(form);
-  form.submit();
-}
+    // Direct redirect (iOS safe)
+    window.location.href = finalURL;
+});
 </script>
 
 </body>
