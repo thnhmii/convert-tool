@@ -2,39 +2,43 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Shopee Short Link Tool</title>
+<title>Ecomobi Short Link Tool</title>
 
 <style>
 body{
-  font-family:Arial;
+  font-family: Arial;
+  background:#f5f5f5;
   display:flex;
   justify-content:center;
-  padding:50px 20px;
-  background:#f5f5f5;
+  align-items:center;
+  height:100vh;
 }
 
 .box{
-  width:100%;
-  max-width:400px;
   background:white;
-  padding:25px;
+  padding:30px;
   border-radius:12px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+  width:380px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
 }
 
-input,button{
+input{
   width:100%;
-  padding:12px;
-  margin-top:10px;
+  padding:10px;
+  margin-bottom:10px;
+  border:1px solid #ddd;
   border-radius:8px;
-  border:1px solid #ccc;
 }
 
 button{
-  cursor:pointer;
-  background:#333;
-  color:white;
+  width:100%;
+  padding:10px;
+  margin-top:8px;
   border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:#ff5722;
+  color:white;
 }
 
 button:hover{
@@ -46,54 +50,48 @@ button:hover{
 <body>
 
 <div class="box">
-  <h3>Shopee → Ecomobi Short Tool</h3>
+  <h3>Shopee → Ecomobi → Short</h3>
 
-  <input type="text" id="original" placeholder="Paste Shopee link here">
+  <input type="text" id="inputLink" placeholder="Paste Shopee link">
 
-  <button onclick="convert()">Generate Short Link</button>
+  <button onclick="generate()">Tạo Link Gọn</button>
 
-  <input type="text" id="result" placeholder="Short link will appear here" readonly>
+  <input type="text" id="result" readonly placeholder="Link gọn sẽ xuất hiện ở đây">
 
-  <button onclick="copyLink()">Copy Link</button>
-  <button onclick="openLink()">Open Link</button>
+  <button onclick="copy()">Copy Link</button>
+  <button onclick="openLink()">Mở Link</button>
 </div>
 
 <script>
+const TOKEN = "YcjWkLnSTyytUqnNLBthd";
 
-const token = "YcjWkLnSTyytUqnNLBthd";
-
-async function convert(){
-
-  let url = document.getElementById("original").value.trim();
-
-  if(!url){
-    alert("Paste Shopee link first");
+async function generate(){
+  let link = document.getElementById("inputLink").value.trim();
+  if(!link){
+    alert("Nhập link trước đã");
     return;
   }
 
-  // Step 1: Tạo link Ecomobi
-  let encoded = encodeURIComponent(url);
-  let ecomobiLink = `https://goeco.mobi/?token=${token}&url=${encoded}`;
+  // Bước 1: tạo link ecomobi
+  let encoded = encodeURIComponent(link);
+  let ecoLink = `https://goeco.mobi/?token=${TOKEN}&url=${encoded}`;
 
   try{
-
-    // Step 2: Gửi qua TinyURL để rút gọn
-    let response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(ecomobiLink)}`);
-
+    // Bước 2: gửi sang TinyURL để rút gọn
+    let response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(ecoLink)}`);
     let shortLink = await response.text();
 
     document.getElementById("result").value = shortLink;
-
   }catch(err){
-    alert("Error creating short link");
+    alert("Lỗi khi rút gọn link");
   }
 }
 
-function copyLink(){
-  let input = document.getElementById("result");
-  input.select();
+function copy(){
+  let text = document.getElementById("result");
+  text.select();
   document.execCommand("copy");
-  alert("Copied!");
+  alert("Đã copy");
 }
 
 function openLink(){
@@ -102,7 +100,6 @@ function openLink(){
     window.open(link, "_blank");
   }
 }
-
 </script>
 
 </body>
