@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Shopee Link Converter</title>
+  <style>
+    body{
+      font-family: Arial;
+      background:#f6f6f6;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+    .box{
+      background:white;
+      padding:25px;
+      border-radius:10px;
+      width:400px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.1);
+    }
+    input{
+      width:100%;
+      padding:10px;
+      margin-bottom:10px;
+      border:1px solid #ddd;
+      border-radius:6px;
+    }
+    button{
+      padding:10px;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      margin-top:5px;
+      width:100%;
+    }
+    .convert{background:#ff6a00;color:white;}
+    .open{background:#28a745;color:white;}
+    .copy{background:#007bff;color:white;}
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h3>Shopee Link Converter</h3>
+  <input type="text" id="original" placeholder="Paste Shopee link here">
+  <button class="convert" onclick="convertLink()">Convert</button>
+
+  <input type="text" id="result" placeholder="Affiliate link will appear here" readonly>
+
+  <button class="open" onclick="openLink()">Open Link</button>
+  <button class="copy" onclick="copyLink()">Copy Link</button>
+</div>
+
+<script>
+  const token = "YcjWkLnSTyytUqnNLBthd";
+
+  function convertLink(){
+    let link = document.getElementById("original").value.trim();
+    if(!link){
+      alert("Please enter Shopee link");
+      return;
+    }
+
+    let encoded = encodeURIComponent(link);
+    let finalLink = `https://goeco.mobi/?token=${token}&url=${encoded}`;
+
+    document.getElementById("result").value = finalLink;
+  }
+
+  function openLink(){
+    let link = document.getElementById("result").value;
+    if(link){
+      window.open(link, "_blank");
+    }
+  }
+
+  function copyLink(){
+    let copyText = document.getElementById("result");
+    copyText.select();
+    document.execCommand("copy");
+    alert("Copied!");
+  }
+</script>
+
+</body>
+</html>
