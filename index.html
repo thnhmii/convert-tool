@@ -1,87 +1,164 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Shopee Link Converter</title>
-  <style>
-    body{
-      font-family: Arial;
-      background:#f6f6f6;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:100vh;
-    }
-    .box{
-      background:white;
-      padding:25px;
-      border-radius:10px;
-      width:400px;
-      box-shadow:0 5px 20px rgba(0,0,0,0.1);
-    }
-    input{
-      width:100%;
-      padding:10px;
-      margin-bottom:10px;
-      border:1px solid #ddd;
-      border-radius:6px;
-    }
-    button{
-      padding:10px;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-      margin-top:5px;
-      width:100%;
-    }
-    .convert{background:#ff6a00;color:white;}
-    .open{background:#28a745;color:white;}
-    .copy{background:#007bff;color:white;}
-  </style>
+<meta charset="UTF-8">
+<title>Shopee Link Converter</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg,#ff6a00,#ff8c00);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container{
+  background:white;
+  width:100%;
+  max-width:430px;
+  padding:35px;
+  border-radius:20px;
+  box-shadow:0 25px 60px rgba(0,0,0,0.25);
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+h2{
+  text-align:center;
+  margin-bottom:25px;
+  color:#ff6a00;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border:2px solid #eee;
+  border-radius:14px;
+  font-size:14px;
+  margin-bottom:14px;
+  transition:0.3s;
+}
+
+input:focus{
+  border-color:#ff6a00;
+  outline:none;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.3s;
+  font-size:14px;
+}
+
+.convert{
+  background: linear-gradient(45deg,#ff6a00,#ff8c00);
+  color:white;
+}
+
+.convert:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 25px rgba(255,106,0,0.4);
+}
+
+.open{
+  background:#16a34a;
+  color:white;
+}
+
+.open:hover{
+  transform:translateY(-2px);
+}
+
+.copy{
+  background:#2563eb;
+  color:white;
+}
+
+.copy:hover{
+  transform:translateY(-2px);
+}
+
+.message{
+  text-align:center;
+  font-size:13px;
+  margin-top:12px;
+  color:#16a34a;
+}
+</style>
 </head>
 
 <body>
 
-<div class="box">
-  <h3>Shopee Link Converter</h3>
-  <input type="text" id="original" placeholder="Paste Shopee link here">
-  <button class="convert" onclick="convertLink()">Convert</button>
+<div class="container">
+  <h2>🔥 Shopee Link Converter</h2>
+
+  <input type="text" id="original" placeholder="Paste your Shopee link here">
+
+  <button class="convert" onclick="convertLink()">Convert Link</button>
 
   <input type="text" id="result" placeholder="Affiliate link will appear here" readonly>
 
-  <button class="open" onclick="openLink()">Open Link</button>
-  <button class="copy" onclick="copyLink()">Copy Link</button>
+  <button class="open" onclick="openLink()">Open Affiliate Link</button>
+  <button class="copy" onclick="copyLink()">Copy Affiliate Link</button>
+
+  <div class="message" id="message"></div>
 </div>
 
 <script>
-  const token = "YcjWkLnSTyytUqnNLBthd";
+const token = "YcjWkLnSTyytUqnNLBthd";
 
-  function convertLink(){
-    let link = document.getElementById("original").value.trim();
-    if(!link){
-      alert("Please enter Shopee link");
-      return;
-    }
+function convertLink(){
+  let link = document.getElementById("original").value.trim();
+  let msg = document.getElementById("message");
 
-    let encoded = encodeURIComponent(link);
-    let finalLink = `https://goeco.mobi/?token=${token}&url=${encoded}`;
-
-    document.getElementById("result").value = finalLink;
+  if(!link){
+    msg.innerText = "Please enter a Shopee link.";
+    msg.style.color = "red";
+    return;
   }
 
-  function openLink(){
-    let link = document.getElementById("result").value;
-    if(link){
-      window.open(link, "_blank");
-    }
-  }
+  let encoded = encodeURIComponent(link);
+  let finalLink = `https://goeco.mobi/?token=${token}&url=${encoded}`;
 
-  function copyLink(){
-    let copyText = document.getElementById("result");
+  document.getElementById("result").value = finalLink;
+  msg.innerText = "Affiliate link generated successfully!";
+  msg.style.color = "#16a34a";
+}
+
+function openLink(){
+  let link = document.getElementById("result").value;
+  if(link){
+    window.open(link, "_blank");
+  }
+}
+
+function copyLink(){
+  let copyText = document.getElementById("result");
+  if(copyText.value){
     copyText.select();
     document.execCommand("copy");
-    alert("Copied!");
+    let msg = document.getElementById("message");
+    msg.innerText = "Copied to clipboard!";
+    msg.style.color = "#2563eb";
   }
+}
 </script>
 
 </body>
