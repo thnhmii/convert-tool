@@ -2,103 +2,83 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Ecomobi Short Link Tool</title>
+<title>Shopee Link</title>
 
 <style>
+*{box-sizing:border-box}
+
 body{
-  font-family: Arial;
-  background:#f5f5f5;
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:transparent;
   display:flex;
   justify-content:center;
-  align-items:center;
-  height:100vh;
+  align-items:flex-start;
+  padding:40px 15px;
 }
 
-.box{
-  background:white;
+.container{
+  width:100%;
+  max-width:380px;
   padding:30px;
-  border-radius:12px;
-  width:380px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+  border-radius:18px;
+  background:rgba(255,255,255,0.35);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(0,0,0,0.15);
+  box-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
+
+h2{
+  text-align:center;
+  margin-bottom:20px;
+  font-size:18px;
+  color:#333;
+  font-weight:600;
 }
 
 input{
   width:100%;
-  padding:10px;
-  margin-bottom:10px;
-  border:1px solid #ddd;
-  border-radius:8px;
+  padding:12px;
+  border:1px solid rgba(0,0,0,0.2);
+  border-radius:10px;
+  font-size:14px;
+  margin-bottom:12px;
+  background:rgba(255,255,255,0.6);
 }
 
 button{
   width:100%;
-  padding:10px;
-  margin-top:8px;
-  border:none;
-  border-radius:8px;
+  padding:12px;
+  border-radius:10px;
+  font-size:14px;
   cursor:pointer;
-  background:#ff5722;
+  background:#333;
   color:white;
-}
-
-button:hover{
-  opacity:0.9;
+  border:none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-  <h3>Shopee → Ecomobi → Short</h3>
-
-  <input type="text" id="inputLink" placeholder="Paste Shopee link">
-
-  <button onclick="generate()">Tạo Link Gọn</button>
-
-  <input type="text" id="result" readonly placeholder="Link gọn sẽ xuất hiện ở đây">
-
-  <button onclick="copy()">Copy Link</button>
-  <button onclick="openLink()">Mở Link</button>
+<div class="container">
+  <h2>Dán link Shopee</h2>
+  <input type="text" id="original" placeholder="Paste Shopee link">
+  <button onclick="goLink()">Mở Link</button>
 </div>
 
 <script>
 const TOKEN = "YcjWkLnSTyytUqnNLBthd";
 
-async function generate(){
-  let link = document.getElementById("inputLink").value.trim();
-  if(!link){
-    alert("Nhập link trước đã");
-    return;
-  }
+function goLink(){
+  let link = document.getElementById("original").value.trim();
+  if(!link) return;
 
-  // Bước 1: tạo link ecomobi
   let encoded = encodeURIComponent(link);
-  let ecoLink = `https://goeco.mobi/?token=${TOKEN}&url=${encoded}`;
+  let finalLink = `https://goeco.mobi/?token=${TOKEN}&url=${encoded}`;
 
-  try{
-    // Bước 2: gửi sang TinyURL để rút gọn
-    let response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(ecoLink)}`);
-    let shortLink = await response.text();
-
-    document.getElementById("result").value = shortLink;
-  }catch(err){
-    alert("Lỗi khi rút gọn link");
-  }
-}
-
-function copy(){
-  let text = document.getElementById("result");
-  text.select();
-  document.execCommand("copy");
-  alert("Đã copy");
-}
-
-function openLink(){
-  let link = document.getElementById("result").value;
-  if(link){
-    window.open(link, "_blank");
-  }
+  // Nhảy thẳng luôn
+  window.location.href = finalLink;
 }
 </script>
 
