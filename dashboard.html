@@ -2,20 +2,24 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Voucher Manager</title>
+<title>MyDeal Voucher Hub</title>
 <style>
 body{
   font-family:sans-serif;
-  background:#111;
+  background:#121212;
   color:white;
   padding:20px;
 }
-h2{margin-top:40px}
+h1{margin-bottom:30px}
+
+.section{
+  margin-bottom:50px;
+}
 
 .card{
-  background:rgba(255,20,90,0.9);
-  padding:20px;
-  border-radius:14px;
+  background:rgba(220,30,90,0.95);
+  padding:18px;
+  border-radius:16px;
   margin-bottom:15px;
   box-shadow:0 6px 0 #000;
 }
@@ -26,19 +30,19 @@ h2{margin-top:40px}
   margin-bottom:10px;
 }
 
-button{
-  background:#000;
-  color:#fff;
-  border:none;
-  padding:8px 12px;
-  border-radius:6px;
-  cursor:pointer;
+input{
+  width:100%;
+  padding:8px;
+  margin:6px 0;
 }
 
-input{
-  padding:8px;
-  margin:5px 0;
-  width:100%;
+button{
+  padding:8px 12px;
+  background:black;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -46,45 +50,47 @@ input{
 
 <h1>Voucher Dashboard</h1>
 
-<!-- ===== TẠO MÃ ===== -->
+<div class="section">
 <h2>Tạo Voucher</h2>
 
-<input id="title" placeholder="Tiêu đề (VD: 30% OFF Capped RM25)">
+<input id="title" placeholder="Tiêu đề">
 <input id="code" placeholder="Mã voucher">
-<input id="img" placeholder="Link hình ảnh">
-<input id="link" placeholder="Link mở (Shopee link)">
-<input id="desc" placeholder="Mô tả ngắn">
+<input id="image" placeholder="Link hình ảnh">
+<input id="desc" placeholder="Mô tả">
+<input id="customLink" placeholder="Link tùy chỉnh (nếu có)">
 
 <button onclick="addVoucher()">Tạo mã</button>
+</div>
 
-<!-- ===== HIỆN MÃ ===== -->
+<div class="section">
 <h2>Voucher Hiện Có</h2>
-<div id="voucherList"></div>
+<div id="list"></div>
+</div>
 
 <script>
-let vouchers = JSON.parse(localStorage.getItem("vouchers")) || [];
+let vouchers = JSON.parse(localStorage.getItem("mydeal_vouchers")) || [];
 
 function save(){
-  localStorage.setItem("vouchers", JSON.stringify(vouchers));
+  localStorage.setItem("mydeal_vouchers", JSON.stringify(vouchers));
   render();
 }
 
 function addVoucher(){
   let v = {
-    title:document.getElementById("title").value,
-    code:document.getElementById("code").value,
-    img:document.getElementById("img").value,
-    link:document.getElementById("link").value,
-    desc:document.getElementById("desc").value
+    title:title.value,
+    code:code.value,
+    image:image.value,
+    desc:desc.value,
+    link:customLink.value || "https://shopee.com.my/user/voucher-wallet"
   };
   vouchers.push(v);
   save();
 }
 
-function openVoucher(code){
+function openVoucher(code, link){
   navigator.clipboard.writeText(code);
-  window.open("https://shopee.com.my/user/voucher-wallet","_blank");
-  alert("Đã copy mã: "+code+"\nVào Add Voucher và dán mã rồi nhấn Enter.");
+  window.open(link, "_blank");
+  alert("Đã copy mã: " + code + "\nDán vào Add Voucher và nhấn Enter.");
 }
 
 function render(){
@@ -92,15 +98,15 @@ function render(){
   vouchers.forEach(v=>{
     html+=`
     <div class="card">
-      ${v.img ? `<img src="${v.img}">`:""}
+      ${v.image ? `<img src="${v.image}">`:""}
       <h3>${v.title}</h3>
       <p>${v.desc}</p>
       <p><b>Code:</b> ${v.code}</p>
-      <button onclick="openVoucher('${v.code}')">Mở Link</button>
+      <button onclick="openVoucher('${v.code}','${v.link}')">Mở Link</button>
     </div>
     `;
   });
-  document.getElementById("voucherList").innerHTML=html;
+  list.innerHTML = html;
 }
 
 render();
