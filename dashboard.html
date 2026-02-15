@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Voucher Manager</title>
+<style>
+body{
+  font-family:sans-serif;
+  background:#111;
+  color:white;
+  padding:20px;
+}
+h2{margin-top:40px}
+
+.card{
+  background:rgba(255,20,90,0.9);
+  padding:20px;
+  border-radius:14px;
+  margin-bottom:15px;
+  box-shadow:0 6px 0 #000;
+}
+
+.card img{
+  width:100%;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+
+button{
+  background:#000;
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+input{
+  padding:8px;
+  margin:5px 0;
+  width:100%;
+}
+</style>
+</head>
+<body>
+
+<h1>Voucher Dashboard</h1>
+
+<!-- ===== TẠO MÃ ===== -->
+<h2>Tạo Voucher</h2>
+
+<input id="title" placeholder="Tiêu đề (VD: 30% OFF Capped RM25)">
+<input id="code" placeholder="Mã voucher">
+<input id="img" placeholder="Link hình ảnh">
+<input id="link" placeholder="Link mở (Shopee link)">
+<input id="desc" placeholder="Mô tả ngắn">
+
+<button onclick="addVoucher()">Tạo mã</button>
+
+<!-- ===== HIỆN MÃ ===== -->
+<h2>Voucher Hiện Có</h2>
+<div id="voucherList"></div>
+
+<script>
+let vouchers = JSON.parse(localStorage.getItem("vouchers")) || [];
+
+function save(){
+  localStorage.setItem("vouchers", JSON.stringify(vouchers));
+  render();
+}
+
+function addVoucher(){
+  let v = {
+    title:document.getElementById("title").value,
+    code:document.getElementById("code").value,
+    img:document.getElementById("img").value,
+    link:document.getElementById("link").value,
+    desc:document.getElementById("desc").value
+  };
+  vouchers.push(v);
+  save();
+}
+
+function openVoucher(code){
+  navigator.clipboard.writeText(code);
+  window.open("https://shopee.com.my/user/voucher-wallet","_blank");
+  alert("Đã copy mã: "+code+"\nVào Add Voucher và dán mã rồi nhấn Enter.");
+}
+
+function render(){
+  let html="";
+  vouchers.forEach(v=>{
+    html+=`
+    <div class="card">
+      ${v.img ? `<img src="${v.img}">`:""}
+      <h3>${v.title}</h3>
+      <p>${v.desc}</p>
+      <p><b>Code:</b> ${v.code}</p>
+      <button onclick="openVoucher('${v.code}')">Mở Link</button>
+    </div>
+    `;
+  });
+  document.getElementById("voucherList").innerHTML=html;
+}
+
+render();
+</script>
+
+</body>
+</html>
